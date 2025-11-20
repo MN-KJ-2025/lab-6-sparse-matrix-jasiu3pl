@@ -23,7 +23,18 @@ def is_diagonally_dominant(A: np.ndarray | sp.sparse.csc_array) -> bool | None:
             w przeciwnym wypadku `False`.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not isinstance(A, (np.ndarray, sp.sparse.csc_array)):
+        return None
+    if A.ndim != 2 or A.shape[0] != A.shape[1]:
+        return None
+    
+    diag_vec = np.abs(np.diagonal(A))
+    sum_rows = np.sum(np.abs(A), axis=1) - diag_vec
+    
+    if np.all(diag_vec > sum_rows):
+        return True
+    else:
+        return False
 
 
 def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> float | None:
@@ -40,4 +51,11 @@ def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> float | None:
         (float): Wartość normy residuum dla podanych parametrów.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not isinstance(A, np.ndarray) or not isinstance(x, np.ndarray) or not isinstance(b, np.ndarray):
+        return None
+    if A.ndim != 2 or x.ndim != 1 or b.ndim != 1:
+        return None
+    if A.shape[0] != b.shape[0] or A.shape[1] != x.shape[0]:
+        return None
+    r = A @ x - b
+    return np.linalg.norm(r)
