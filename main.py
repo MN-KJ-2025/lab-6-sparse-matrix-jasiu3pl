@@ -28,7 +28,7 @@ def is_diagonally_dominant(A: np.ndarray | sp.sparse.csc_array) -> bool | None:
     if A.ndim != 2 or A.shape[0] != A.shape[1]:
         return None
     
-    diag_vec = np.abs(np.diagonal(A))
+    diag_vec = np.abs(A.diagonal())
     sum_rows = np.sum(np.abs(A), axis=1) - diag_vec
     
     if np.all(diag_vec > sum_rows):
